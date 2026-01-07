@@ -1,0 +1,15 @@
+name: Alloc Signature Mismatch
+
+on:
+  workflow_dispatch:
+
+jobs:
+  rustc_bisect:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v5
+    - uses: dtolnay/rust-toolchain@stable
+    - run: |
+        cargo install cargo-bisect-rustc
+        cd alloc_signature_mismatch
+        RUSTFLAGS="-Dwarnings" cargo bisect-rustc --start 1.91.0 --end 1.92.0 --target wasm32-unknown-unknown
